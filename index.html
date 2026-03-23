@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StellarPVP — Regolamento Ufficiale</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #03050f;
+    --bg2:       #070b1a;
+    --bg3:       #0a1020;
+    --bg4:       #0d1530;
+    --cyan:      #00e5ff;
+    --purple:    #9b59f5;
+    --gold:      #ffd166;
+    --pink:      #ff6b9d;
+    --green:     #00ffa3;
+    --text:      #b8cce0;
+    --text-dim:  #4a6080;
+    --border:    #111e35;
+    --border2:   #1a2d50;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* CANVAS STELLE (Sempre attivo come sfondo) */
+  #stars-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(155,89,245,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 70%, rgba(0,229,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .header-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  }
+
+  .pre-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--cyan);
+    opacity: 0.7;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(56px, 14vw, 140px);
+    line-height: 0.9;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(0,229,255,0.3);
+  }
+
+  .logo .pvp { color: var(--cyan); }
+
+  .logo-sub {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(12px, 2vw, 18px);
+    letter-spacing: 8px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  .credit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 36px;
+    background: rgba(155,89,245,0.1);
+    border: 1px solid rgba(155,89,245,0.3);
+    padding: 10px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--purple);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(3, 5, 15, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .nav-inner {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav a {
+    padding: 15px 20px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+
+  nav a:hover { color: var(--cyan); }
+
+  /* CARDS & SECTIONS */
+  main { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+  section { margin-bottom: 80px; }
+  
+  .sec-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--cyan);
+    padding-left: 15px;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    padding: 25px;
+    margin-bottom: 15px;
+    position: relative;
+  }
+
+  .card h3 { color: var(--cyan); margin-bottom: 15px; font-size: 14px; letter-spacing: 1px; }
+  .card ul { list-style: none; }
+  .card li { padding: 5px 0 5px 20px; position: relative; font-size: 14px; }
+  .card li::before { content: '▹'; position: absolute; left: 0; color: var(--cyan); }
+
+  .alert { padding: 20px; border: 1px solid; margin-bottom: 20px; display: flex; gap: 15px; }
+  .alert-red { border-color: var(--pink); background: rgba(255,107,157,0.05); }
+  .alert-cyan { border-color: var(--cyan); background: rgba(0,229,255,0.05); }
+
+  .hl { color: var(--cyan); font-weight: 700; }
+  .hlp { color: var(--purple); font-weight: 700; }
+
+  /* STAFF LIST */
+  .staff-group { margin-bottom: 15px; }
+  .staff-rank { font-weight: 700; color: var(--purple); margin-right: 10px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin-top: 20px; }
+  table { width: 100%; border-collapse: collapse; background: var(--bg2); }
+  th, td { padding: 12px; text-align: left; border: 1px solid var(--border); font-size: 13px; }
+  th { background: var(--bg3); color: var(--cyan); }
+
+  /* SHOP RANGHI */
+  .ranks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  .rank-card {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid var(--border2);
+  }
+  .rank-name { font-family: 'Orbitron', sans-serif; font-weight: 700; margin: 10px 0; }
+  .rank-stellar { border-bottom-color: var(--purple); }
+
+  footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border2); }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<div class="content">
+
+<header>
+  <div class="header-grid"></div>
+  <div class="pre-title">Official Web Portal</div>
+  <div class="logo">Stellar<span class="pvp">PVP</span></div>
+  <div class="logo-sub">PVP · GANGS · SEMI-REALISTIC</div>
+  <div class="credit-badge">
+    Fondato da <strong>Youness Swampfr e Alestryx</strong>, CEO di StellarPVP
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#intro">Info</a>
+    <a href="#regole">Regolamento</a>
+    <a href="#gang">Gang</a>
+    <a href="#staff">Staff</a>
+    <a href="#shop">Shop</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="intro">
+    <h2 class="sec-title">Presentazione</h2>
+    <div class="card">
+      <p>
+        <span class="hl">StellarPVP</span> è un server Minecraft italiano dedicato al combattimento con armi semi-realistiche, alle gang e al PVP ad alto livello. 
+        Nato dalla visione di <span class="hlp">Youness Swampfr e Alestryx</span>, fondatori del progetto, StellarPVP mira a creare una community fair, competitiva e rispettosa dove ogni giocatore ha la possibilità di emergere grazie alle proprie abilità. Questo regolamento è la base che garantisce un'esperienza di gioco equilibrata e divertente per tutti.
+      </p>
+    </div>
+  </section>
+
+  <section id="regole">
+    <h2 class="sec-title">Regolamento</h2>
+    <div class="alert alert-red">
+      <strong>ATTENZIONE:</strong> Rimosse regole obsolete su Griefing e Farm. Il PVP è ora regolamentato per un'esperienza competitiva.
+    </div>
+    <div class="card">
+      <h3>Combattimento</h3>
+      <ul>
+        <li>Vietato il combat logging (uscire durante il pvp).</li>
+        <li>Vietato l'uso di hack o client modificati (Ban Permanente).</li>
+        <li>Sfruttare bug o glitch comporta il ban immediato.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="gang">
+    <h2 class="sec-title">Gang & Clan</h2>
+    <div class="card">
+      <h3>Specifiche Tecniche</h3>
+      <ul>
+        <li><strong>Membri:</strong> Minimo 2 / Massimo 10.</li>
+        <li><strong>Conquista zona:</strong> Cooldown di 15 minuti.</li>
+        <li><strong>In caso di sconfitta:</strong> Attesa di 1 ora per riprovare.</li>
+        <li><strong>Guerra:</strong> Limite massimo inesistente.</li>
+        <li><strong>Alleanze:</strong> <span class="hl">Nessuna alleanza permessa.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="staff">
+    <h2 class="sec-title">Gerarchia Staff</h2>
+    <div class="card">
+      <div class="staff-group"><span class="staff-rank">DIREZIONE:</span> Owner: Youness Swampfr e Alestryx | Manager: Simo_PvP</div>
+      <div class="staff-group"><span class="staff-rank">AMMINISTRAZIONE:</span> Sr. Admin, Admin, Jr. Admin</div>
+      <div class="staff-group"><span class="staff-rank">MODERAZIONE:</span> Sr. Moderator, Moderator, Jr. Moderator</div>
+      <div class="staff-group"><span class="staff-rank">SUPPORTO:</span> Sr. Helper, Helper, Jr. Helper</div>
+      <div class="staff-group"><span class="staff-rank">DEVELOPER:</span> Sr. Developer, Developer, Jr. Developer</div>
+      <div class="staff-group"><span class="staff-rank">BUILDER:</span> Sr. Builder, Builder, Jr. Builder</div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <h2 class="sec-title">Shop Ranghi & Sostegno</h2>
+    <div class="ranks-grid">
+      <div class="rank-card">
+        <div style="font-size:24px">⚙️</div>
+        <div class="rank-name">IRON</div>
+        <div style="font-size:12px; color:var(--text-dim)">Prefisso [Iron], Accesso Basic</div>
+      </div>
+      <div class="rank-card">
+        <div style="font-size:24px">⭐</div>
+        <div class="rank-name">GOLD</div>
+        <div style="font-size:12px; color:var(--text-dim)">Kit Gold Settimanale</div>
+      </div>
+      <div class="rank-card">
+        <div style="font-size:24px">💎</div>
+        <div class="rank-name">DIAMOND</div>
+        <div style="font-size:12px; color:var(--text-dim)">Fly in safe, Nick Colorato</div>
+      </div>
+      <div class="rank-card">
+        <div style="font-size:24px">🔮</div>
+        <div class="rank-name">CRYSTAL</div>
+        <div style="font-size:12px; color:var(--text-dim)">Accesso Beta Armi, XP Boost</div>
+      </div>
+      <div class="rank-card rank-stellar">
+        <div style="font-size:24px">✦</div>
+        <div class="rank-name" style="color:var(--cyan)">STELLAR</div>
+        <div style="font-size:12px; color:var(--text-dim)">Grado Supremo, Cosmetici Unici</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2024 StellarPVP. Fondato da Youness Swampfr e Alestryx.</p>
+</footer>
+
+</div>
+
+<script>
+  // Script per lo sfondo di stelle animato (leggero e fluido)
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, stars = [];
+
+  function init() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    stars = [];
+    for(let i=0; i<150; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.5,
+        d: Math.random() * 0.5 + 0.1
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = "white";
+    stars.forEach(s => {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+      s.y -= s.d;
+      if(s.y < 0) s.y = h;
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
